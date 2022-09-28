@@ -1,0 +1,37 @@
+<template>
+    <section class="bg-coolGray-50 py-4">
+  <div class="px-4">
+    <div class="mx-auto h-full border border-coolGray-100 bg-white rounded-md shadow-dashboard">
+      <div class="p-6 border-b border-coolGray-100">
+        <div class="flex flex-wrap items-center justify-between -m-2 mb-4">
+          <div class="w-auto p-2">
+            <h2 class="text-coolGray-900 text-lg font-semibold">Active now</h2>
+          </div>
+          <div class="w-auto p-2">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 6.66667C7.73629 6.66667 7.47851 6.74487 7.25924 6.89138C7.03998 7.03788 6.86908 7.24612 6.76816 7.48976C6.66724 7.73339 6.64084 8.00148 6.69229 8.26012C6.74373 8.51876 6.87072 8.75634 7.05719 8.94281C7.24366 9.12928 7.48124 9.25627 7.73988 9.30772C7.99852 9.35916 8.26661 9.33276 8.51025 9.23184C8.75388 9.13092 8.96212 8.96003 9.10863 8.74076C9.25514 8.5215 9.33333 8.26371 9.33333 8C9.33333 7.64638 9.19286 7.30724 8.94281 7.05719C8.69276 6.80714 8.35362 6.66667 8 6.66667ZM3.33333 6.66667C3.06963 6.66667 2.81184 6.74487 2.59257 6.89138C2.37331 7.03788 2.20241 7.24612 2.10149 7.48976C2.00058 7.73339 1.97417 8.00148 2.02562 8.26012C2.07707 8.51876 2.20405 8.75634 2.39052 8.94281C2.57699 9.12928 2.81457 9.25627 3.07321 9.30772C3.33185 9.35916 3.59994 9.33276 3.84358 9.23184C4.08721 9.13092 4.29545 8.96003 4.44196 8.74076C4.58847 8.5215 4.66667 8.26371 4.66667 8C4.66667 7.64638 4.52619 7.30724 4.27614 7.05719C4.02609 6.80714 3.68696 6.66667 3.33333 6.66667ZM12.6667 6.66667C12.403 6.66667 12.1452 6.74487 11.9259 6.89138C11.7066 7.03788 11.5357 7.24612 11.4348 7.48976C11.3339 7.73339 11.3075 8.00148 11.359 8.26012C11.4104 8.51876 11.5374 8.75634 11.7239 8.94281C11.9103 9.12928 12.1479 9.25627 12.4065 9.30772C12.6652 9.35916 12.9333 9.33276 13.1769 9.23184C13.4205 9.13092 13.6288 8.96003 13.7753 8.74076C13.9218 8.5215 14 8.26371 14 8C14 7.64638 13.8595 7.30724 13.6095 7.05719C13.3594 6.80714 13.0203 6.66667 12.6667 6.66667Z" fill="#D5DAE1"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="chart-graph1-radial-bar" style="min-height: 218.7px;"><div id="apexcharts77xft4od" class="apexcharts-canvas apexcharts77xft4od apexcharts-theme-light" style="width: 352px; height: 218.7px;"><svg id="SvgjsSvg3745" width="352" height="218.7" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;"><g id="SvgjsG3747" class="apexcharts-inner apexcharts-graphical" transform="translate(69, 0)"><defs id="SvgjsDefs3746"><clipPath id="gridRectMask77xft4od"><rect id="SvgjsRect3749" width="222" height="240" x="-3" y="-1" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><clipPath id="forecastMask77xft4od"></clipPath><clipPath id="nonForecastMask77xft4od"></clipPath><clipPath id="gridRectMarkerMask77xft4od"><rect id="SvgjsRect3750" width="220" height="242" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath></defs><g id="SvgjsG3751" class="apexcharts-radialbar"><g id="SvgjsG3752"><g id="SvgjsG3753" class="apexcharts-tracks"><g id="SvgjsG3754" class="apexcharts-radialbar-track apexcharts-track" rel="1"><path id="apexcharts-radialbarTrack-0" d="M 108 28.49146341463414 A 79.50853658536586 79.50853658536586 0 1 1 107.98612314260187 28.49146462561839" fill="none" fill-opacity="1" stroke="rgba(238,240,243,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="9.607731707317074" stroke-dasharray="0" class="apexcharts-radialbar-area" data:pathorig="M 108 28.49146341463414 A 79.50853658536586 79.50853658536586 0 1 1 107.98612314260187 28.49146462561839"></path></g></g><g id="SvgjsG3756"><g id="SvgjsG3760" class="apexcharts-series apexcharts-radial-series" seriesname="254" rel="1" data:realindex="0"><path id="SvgjsPath3761" d="M 108 28.49146341463414 A 79.50853658536586 79.50853658536586 0 1 1 38.46026701662538 146.54650342829322" fill="none" fill-opacity="0.85" stroke="rgba(59,130,246,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="9.904878048780487" stroke-dasharray="0" class="apexcharts-radialbar-area apexcharts-radialbar-slice-0" data:angle="241" data:value="67" index="0" j="0" data:pathorig="M 108 28.49146341463414 A 79.50853658536586 79.50853658536586 0 1 1 38.46026701662538 146.54650342829322"></path></g><circle id="SvgjsCircle3757" r="59.704670731707324" cx="108" cy="108" class="apexcharts-radialbar-hollow" fill="transparent"></circle><g id="SvgjsG3758" class="apexcharts-datalabels-group" transform="translate(0, 0) scale(1)" style="opacity: 1;"><text id="SvgjsText3759" font-family="Poppins, sans-serif" x="108" y="120" text-anchor="middle" dominant-baseline="auto" font-size="36px" font-weight="600" fill="#000000" class="apexcharts-text apexcharts-datalabel-label" style="font-family: Poppins, sans-serif;">254</text></g></g></g></g><line id="SvgjsLine3762" x1="0" y1="0" x2="216" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" stroke-linecap="butt" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine3763" x1="0" y1="0" x2="216" y2="0" stroke-dasharray="0" stroke-width="0" stroke-linecap="butt" class="apexcharts-ycrosshairs-hidden"></line></g><g id="SvgjsG3748" class="apexcharts-annotations"></g></svg><div class="apexcharts-legend"></div></div></div>
+      </div>
+      <div class="p-6">
+        <div class="flex flex-wrap items-center -m-2">
+          <div class="w-auto p-2">
+            <p class="font-semibold text-2xl text-coolGray-900">$40,206.20</p>
+          </div>
+          <div class="w-auto p-2">
+            <p class="flex items-center p-1 px-2 text-xs text-green-500 font-medium bg-green-100 rounded-full shadow-sm">
+              <svg class="mr-0.5" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.855 5.64499L6.355 3.14499C6.30745 3.09947 6.25138 3.06379 6.19 3.03999C6.06827 2.98998 5.93173 2.98998 5.81 3.03999C5.74863 3.06379 5.69255 3.09947 5.645 3.14499L3.145 5.64499C3.09838 5.69161 3.0614 5.74696 3.03617 5.80787C3.01094 5.86878 2.99796 5.93406 2.99796 5.99999C2.99796 6.13315 3.05085 6.26084 3.145 6.35499C3.23915 6.44915 3.36685 6.50204 3.5 6.50204C3.63315 6.50204 3.76085 6.44915 3.855 6.35499L5.5 4.70499V8.49999C5.5 8.6326 5.55268 8.75978 5.64645 8.85355C5.74022 8.94732 5.86739 8.99999 6 8.99999C6.13261 8.99999 6.25979 8.94732 6.35355 8.85355C6.44732 8.75978 6.5 8.6326 6.5 8.49999V4.70499L8.145 6.35499C8.19148 6.40186 8.24678 6.43906 8.30771 6.46444C8.36864 6.48982 8.434 6.50289 8.5 6.50289C8.56601 6.50289 8.63136 6.48982 8.69229 6.46444C8.75322 6.43906 8.80852 6.40186 8.855 6.35499C8.90186 6.30851 8.93906 6.25321 8.96445 6.19228C8.98983 6.13135 9.0029 6.066 9.0029 5.99999C9.0029 5.93399 8.98983 5.86864 8.96445 5.80771C8.93906 5.74678 8.90186 5.69148 8.855 5.64499Z" fill="#22C55E"></path>
+              </svg>
+              <span>23%</span>
+            </p>
+          </div>
+        </div>
+        <p class="font-medium text-xs text-coolGray-500">Current Balance</p>
+      </div>
+    </div>
+  </div>
+</section>
+</template>
