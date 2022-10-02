@@ -23,10 +23,14 @@ func init() {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
 
-	vip.SetDefault("admin.port", 8080)
+	vip.SetDefault("admin.port", "127.0.0.1:8080")
 	vip.SetDefault("admin.username", "admin")
 	vip.SetDefault("admin.password", "admin")
-	vip.SetDefault("admin.tstorage.data.path", "./data")
+	vip.SetDefault("logging.metrics.influx.enabled", false)
+	vip.SetDefault("logging.metrics.influx.uri", "http://influx:8086")
+	vip.SetDefault("logging.metrics.influx.token", "token")
+	vip.SetDefault("logging.metrics.influx.org", "org")
+	vip.SetDefault("logging.metrics.influx.bucket", "bucket")
 
 	vip.OnConfigChange(func(in fsnotify.Event) {
 		log.Println("Main config has changed and was reloaded")
