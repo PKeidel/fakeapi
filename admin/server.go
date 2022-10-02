@@ -11,26 +11,31 @@ import (
 
 	"github.com/arl/statsviz"
 	"github.com/goji/httpauth"
-	"github.com/nakabonne/tstorage"
+	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
+	influxdb2api "github.com/influxdata/influxdb-client-go/v2/api"
 	"github.com/spf13/viper"
 )
 
 type AdminServer struct {
-	vip      *viper.Viper
-	tStorage *tstorage.Storage
+	vip            *viper.Viper
+	InfluxClient   *influxdb2.Client
+	InfluxWriteApi *influxdb2api.WriteAPIBlocking
 }
 
 func NewAdminServer(v *viper.Viper) *AdminServer {
-	storage, _ := tstorage.NewStorage(
-		tstorage.WithTimestampPrecision(tstorage.Milliseconds),
-		tstorage.WithDataPath(v.GetString("admin.tstorage.data.path")),
-	)
-	return &AdminServer{vip: v, tStorage: &storage}
+	influxClient := influxdb2.NewClient(v.GetString("logging.metrics.influx.uri"), v.GetString("logging.metrics.influx.token"))
+	writeAPI := influxClient.WriteAPIBlocking(v.GetString("logging.metrics.influx.org"), v.GetString("logging.metrics.influx.bucket"))
+	return &AdminServer{
+		vip:            v,
+		InfluxClient:   &influxClient,
+		InfluxWriteApi: &writeAPI,
+	}
 }
 
 func (srv *AdminServer) Close() {
-	(*srv.tStorage).Close()
-	log.Println("AdminServer.Close() -> TStorage.Close()")
+	log.Println("AdminServer.Close()")
+	log.Println("  InfluxDbClient.Close()")
+	(*srv.InfluxClient).Close()
 }
 
 func (srv *AdminServer) StartFakeApi() {
@@ -52,8 +57,8 @@ func (srv *AdminServer) StartFakeApi() {
 	// Open Stats in Browser on http://localhost:9000/debug/statsviz/
 	statsviz.Register(mux)
 
-	intf := fmt.Sprintf(":%d", srv.vip.GetInt("admin.port"))
-	fmt.Println("Listening on", intf)
+	intf := srv.vip.GetString("admin.port")
+	fmt.Printf("Listening on http://%s\n", intf)
 
 	httpServer := http.Server{
 		Addr:    intf,
@@ -83,21 +88,24 @@ func (srv *AdminServer) StartFakeApi() {
 func middlewareTimeLogging(srv *AdminServer, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
+
+		// Log every incomming request
+		log.Printf("%s %s %v", r.Method, r.URL.Path, r.URL.Query())
+
 		next.ServeHTTP(w, r)
-		log.Println("Took:", time.Since(start))
-		go func() {
-			err := (*srv.tStorage).InsertRows([]tstorage.Row{
-				{
-					Metric:    "api.microseconds",
-					DataPoint: tstorage.DataPoint{Timestamp: start.UnixMilli(), Value: float64(time.Since(start).Microseconds())},
-					Labels: []tstorage.Label{
-						{Name: "http.method", Value: r.Method},
-						{Name: "http.path", Value: r.URL.Path},
-					},
-				},
-			})
-			log.Println("TStorage Insert Error:", err)
-		}()
+
+		if srv.vip.GetBool("logging.metrics.influx.enabled") {
+			p := influxdb2.NewPointWithMeasurement("api.stats").
+				AddTag("unit", "temperature").
+				AddTag("http.method", r.Method).
+				AddTag("http.path", r.URL.Path).
+				AddField("microseconds", time.Since(start).Microseconds()).
+				SetTime(time.Now())
+			err := (*srv.InfluxWriteApi).WritePoint(context.Background(), p)
+			if err != nil {
+				log.Println("Influx Write Error:", err)
+			}
+		}
 	})
 }
 

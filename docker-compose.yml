@@ -1,0 +1,12 @@
+version: '3.3'
+
+volumes:
+  influxdb:
+
+services:
+  influxdb: # admin:adminadmin
+    image: influxdb:2.4-alpine
+    volumes:
+      - influxdb:/var/lib/influxdb2
+    ports:
+      - "127.0.0.1:8086:8086"
