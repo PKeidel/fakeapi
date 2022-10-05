@@ -14,6 +14,7 @@ dist-ssr
 
 .env
 data/
+*.yaml
 
 # Editor directories and files
 .vscode/*
