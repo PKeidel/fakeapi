@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 
-	"github.com/PKeidel/fakeapi/admin"
+	"github.com/PKeidel/fakeapi/server"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
@@ -23,7 +24,11 @@ func init() {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
 
-	vip.SetDefault("admin.port", "127.0.0.1:8080")
+	viper.SetEnvPrefix("FAKEAPI")
+	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
+	viper.AutomaticEnv()
+
+	vip.SetDefault("admin.listen", "127.0.0.1:8080")
 	vip.SetDefault("admin.username", "admin")
 	vip.SetDefault("admin.password", "admin")
 	vip.SetDefault("logging.metrics.influx.enabled", false)
@@ -39,9 +44,7 @@ func init() {
 }
 
 func main() {
-	fmt.Println(vip.GetStringSlice("fakeapi.openapi"))
-
-	srv := admin.NewAdminServer(vip)
+	srv := server.NewFakeApiServer(vip)
 	srv.StartFakeApi()
 
 	defer srv.Close()

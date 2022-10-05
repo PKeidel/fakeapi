@@ -1,48 +1,56 @@
-package admin
+package server
 
 import (
 	"context"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
-	"github.com/arl/statsviz"
+	"github.com/PKeidel/fakeapi/frontend/dist"
+	"github.com/PKeidel/fakeapi/router"
 	"github.com/goji/httpauth"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	influxdb2api "github.com/influxdata/influxdb-client-go/v2/api"
 	"github.com/spf13/viper"
 )
 
-type AdminServer struct {
+type FakeApiServer struct {
 	vip            *viper.Viper
 	InfluxClient   *influxdb2.Client
 	InfluxWriteApi *influxdb2api.WriteAPIBlocking
+	Routers        []router.FindRouter
 }
 
-func NewAdminServer(v *viper.Viper) *AdminServer {
+func NewFakeApiServer(v *viper.Viper) *FakeApiServer {
 	influxClient := influxdb2.NewClient(v.GetString("logging.metrics.influx.uri"), v.GetString("logging.metrics.influx.token"))
 	writeAPI := influxClient.WriteAPIBlocking(v.GetString("logging.metrics.influx.org"), v.GetString("logging.metrics.influx.bucket"))
-	return &AdminServer{
+	routers := make([]router.FindRouter, 1)
+	routers[0] = router.NewBasicRouter()
+	return &FakeApiServer{
 		vip:            v,
 		InfluxClient:   &influxClient,
 		InfluxWriteApi: &writeAPI,
+		Routers:        routers,
 	}
 }
 
-func (srv *AdminServer) Close() {
+func (srv *FakeApiServer) Close() {
 	log.Println("AdminServer.Close()")
 	log.Println("  InfluxDbClient.Close()")
 	(*srv.InfluxClient).Close()
 }
 
-func (srv *AdminServer) StartFakeApi() {
+func (srv *FakeApiServer) StartFakeApi() {
 	mux := http.NewServeMux()
 
 	authHandler := httpauth.SimpleBasicAuth(srv.vip.GetString("admin.username"), srv.vip.GetString("admin.password"))
 	finalHandler := http.HandlerFunc(getHandler(srv))
+
+	// mux.Handle("/__admin", http.FileServer(http.FS(dist.AssetsFs)))
 
 	mux.Handle(
 		"/",
@@ -54,10 +62,10 @@ func (srv *AdminServer) StartFakeApi() {
 		),
 	)
 
-	// Open Stats in Browser on http://localhost:9000/debug/statsviz/
-	statsviz.Register(mux)
+	// Open Stats in Browser on http://localhost:8080/debug/statsviz/
+	// statsviz.Register(mux)
 
-	intf := srv.vip.GetString("admin.port")
+	intf := srv.vip.GetString("admin.listen")
 	fmt.Printf("Listening on http://%s\n", intf)
 
 	httpServer := http.Server{
@@ -85,7 +93,7 @@ func (srv *AdminServer) StartFakeApi() {
 	log.Printf("Bye bye")
 }
 
-func middlewareTimeLogging(srv *AdminServer, next http.Handler) http.Handler {
+func middlewareTimeLogging(srv *FakeApiServer, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 
@@ -104,18 +112,53 @@ func middlewareTimeLogging(srv *AdminServer, next http.Handler) http.Handler {
 			err := (*srv.InfluxWriteApi).WritePoint(context.Background(), p)
 			if err != nil {
 				log.Println("Influx Write Error:", err)
+				srv.vip.Set("logging.metrics.influx.enabled", false)
+				srv.vip.WriteConfig()
 			}
 		}
 	})
 }
 
-func getHandler(srv *AdminServer) func(w http.ResponseWriter, r *http.Request) {
+func getHandler(srv *FakeApiServer) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		if r.Method == http.MethodPost {
-			srv.vip.WriteConfig()
+		b, err := dist.AssetsFs.ReadFile(r.URL.Path)
+		if err == nil {
+			w.Write(b)
+			return
 		}
 
-		fmt.Fprintf(w, "%s - %s (%s)", r.Method, r.URL.Path, time.Now().String())
+		// ANY /favicon.ico
+		if r.URL.Path == "/favicon.ico" {
+			w.WriteHeader(404)
+			return
+		}
+
+		// POST /config
+		if r.Method == http.MethodPost && r.URL.Path == "/config" {
+			srv.vip.WriteConfig()
+			w.WriteHeader(http.StatusCreated)
+			return
+		}
+
+		// Query all registered routers
+		for _, router := range srv.Routers {
+			if respList, ok := router.FindRoutes(r); ok {
+				randomIndex := rand.Intn(len(respList))
+				resp := respList[randomIndex]
+				if len(resp.ContentType) > 0 {
+					w.Header().Add("Content-Type", resp.ContentType)
+				}
+				if resp.StatusCode > 0 {
+					w.WriteHeader(resp.StatusCode)
+				}
+				if len(resp.Content) > 0 {
+					fmt.Fprint(w, resp.Content)
+				}
+				return
+			}
+		}
+
+		w.WriteHeader(404)
 	}
 }

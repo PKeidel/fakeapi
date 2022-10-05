@@ -1,0 +1,12 @@
+admin:
+    username: admin
+    password: admin
+    listen: 127.0.0.1:9000
+logging:
+    metrics:
+        influx:
+            bucket: fakeapi-stats
+            enabled: false
+            org: fakeapi
+            token: abcdef==
+            uri: http://127.0.0.1:8086
