@@ -8,8 +8,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
-dist-ssr
+frontend/dist/
+!frontend/dist/dist.go
 *.local
 
 .env
