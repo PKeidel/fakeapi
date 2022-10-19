@@ -5,7 +5,7 @@
       <div class="flex items-center justify-between -m-2">
         <div class="flex flex-wrap items-center w-auto p-2">
           <a class="block max-w-max xl:mr-14" href="#">
-            <img src="vite.svg" alt="">
+            <img src="/vite.svg" alt="">
           </a>
           <ul class="hidden xl:flex flex-wrap">
             <li class="mr-8">
@@ -63,7 +63,7 @@
                 <div class="w-auto p-2">
                   <div class="flex flex-wrap -m-2">
                     <div class="w-auto p-2">
-                      <img src="flex-ui-assets/images/dashboard/navigations/avatar.png" alt="">
+                      <img src="/flex-ui-assets/images/dashboard/navigations/avatar.png" alt="">
                     </div>
                     <div class="w-auto p-2">
                       <h2 class="text-sm font-semibold text-coolGray-800">John Doe</h2>
@@ -95,7 +95,7 @@
       <div class="relative bg-white flex-1">
         <div class="fixed -left-4 p-8 pl-12 max-w-xs w-9/12 z-50 bg-white">
           <a class="block max-w-max" href="#">
-            <img src="flex-ui-assets/logos/dashboard/flex-ui-black-red.svg" alt="">
+            <img src="/flex-ui-assets/logos/dashboard/flex-ui-black-red.svg" alt="">
           </a>
         </div>
         <div class="mt-28">
@@ -240,7 +240,7 @@
               <div class="w-auto">
                 <div class="flex flex-wrap -mx-2">
                   <div class="w-auto p-2">
-                    <img src="flex-ui-assets/images/dashboard/navigations/avatar.png" alt="">
+                    <img src="/flex-ui-assets/images/dashboard/navigations/avatar.png" alt="">
                   </div>
                   <div class="w-auto p-2">
                     <h2 class="text-sm font-semibold text-coolGray-800">John Doe</h2>

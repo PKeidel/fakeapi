@@ -50,7 +50,7 @@ func (srv *FakeApiServer) StartFakeApi() {
 	authHandler := httpauth.SimpleBasicAuth(srv.vip.GetString("admin.username"), srv.vip.GetString("admin.password"))
 	finalHandler := http.HandlerFunc(getHandler(srv))
 
-	// mux.Handle("/__admin", http.FileServer(http.FS(dist.AssetsFs)))
+	mux.Handle("/__admin/", http.StripPrefix("/__admin/", http.FileServer(http.FS(dist.AssetsFs))))
 
 	mux.Handle(
 		"/",
