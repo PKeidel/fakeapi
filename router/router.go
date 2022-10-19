@@ -15,6 +15,7 @@ func NewBasicRouter() BasicRouter {
 
 type FindRouter interface {
 	FindRoutes(req *http.Request) ([]RouterResponse, bool)
+	ServeHTTP(rw http.ResponseWriter, req *http.Request) (ok bool)
 }
 
 type BasicRouter struct {
@@ -37,8 +38,11 @@ func (router BasicRouter) AddRoute(path, method string, res RouterResponse) {
 	router.RoutesCache[path][method] = append(router.RoutesCache[path][method], res)
 }
 
-func (router BasicRouter) FindRoutes(req *http.Request) (res []RouterResponse, ok bool) {
+func (router BasicRouter) ServeHTTP(rw http.ResponseWriter, req *http.Request) (ok bool) {
+	return
+}
 
+func (router BasicRouter) FindRoutes(req *http.Request) (res []RouterResponse, ok bool) {
 	if _, ok := router.RoutesCache[req.URL.Path]; ok {
 		if _, ok := router.RoutesCache[req.URL.Path][req.Method]; ok {
 			if responses, ok := router.RoutesCache[req.URL.Path][req.Method]; ok {

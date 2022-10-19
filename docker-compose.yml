@@ -4,7 +4,7 @@ volumes:
   influxdb:
 
 services:
-  influxdb: # admin:adminadmin
+  influxdb:
     image: influxdb:2.4-alpine
     volumes:
       - influxdb:/var/lib/influxdb2

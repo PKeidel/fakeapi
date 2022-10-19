@@ -28,8 +28,9 @@ type FakeApiServer struct {
 func NewFakeApiServer(v *viper.Viper) *FakeApiServer {
 	influxClient := influxdb2.NewClient(v.GetString("logging.metrics.influx.uri"), v.GetString("logging.metrics.influx.token"))
 	writeAPI := influxClient.WriteAPIBlocking(v.GetString("logging.metrics.influx.org"), v.GetString("logging.metrics.influx.bucket"))
-	routers := make([]router.FindRouter, 1)
+	routers := make([]router.FindRouter, 2)
 	routers[0] = router.NewBasicRouter()
+	routers[1] = router.NewProxyRouter("https://api.openweathermap.org")
 	return &FakeApiServer{
 		vip:            v,
 		InfluxClient:   &influxClient,
@@ -50,7 +51,7 @@ func (srv *FakeApiServer) StartFakeApi() {
 	authHandler := httpauth.SimpleBasicAuth(srv.vip.GetString("admin.username"), srv.vip.GetString("admin.password"))
 	finalHandler := http.HandlerFunc(getHandler(srv))
 
-	// mux.Handle("/__admin", http.FileServer(http.FS(dist.AssetsFs)))
+	mux.Handle("/__admin/", http.StripPrefix("/__admin/", http.FileServer(http.FS(dist.AssetsFs))))
 
 	mux.Handle(
 		"/",
@@ -143,6 +144,12 @@ func getHandler(srv *FakeApiServer) func(w http.ResponseWriter, r *http.Request)
 
 		// Query all registered routers
 		for _, router := range srv.Routers {
+			// if ServeHTTP is implemented, we use this method
+			if ok := router.ServeHTTP(w, r); ok {
+				return
+			}
+
+			// else use FindRoutes
 			if respList, ok := router.FindRoutes(r); ok {
 				randomIndex := rand.Intn(len(respList))
 				resp := respList[randomIndex]
