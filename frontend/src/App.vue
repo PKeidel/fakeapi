@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-  import Nav from './components/Nav.vue'
+import Nav from './components/Nav.vue'
 import ChartGauge from './components/ChartGauge.vue'
 import LineChart from './components/LineChart.vue'
 </script>
